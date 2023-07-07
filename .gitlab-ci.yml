@@ -1,5 +1,4 @@
 stages:
-  - .pre #not necessary to include, can be omitted since is sys defined
   - build
   - test
 
@@ -8,17 +7,12 @@ build website:
   stage: build
   script:
     - yarn install
+    - yarn lint
+    - yarn test
     - yarn build
   artifacts:
     paths:
       - build
-
-linter:
-  image: node:16-alpine
-  stage: .pre
-  script:
-    - yarn install
-    - yarn lint
 
 test website:
   image: node:16-alpine
@@ -30,10 +24,4 @@ test website:
     - sleep 10
     - curl http://localhost:3000 | grep "React App"
 
-unit test:
-  image: node:16-alpine
-  stage: .pre
-  script:
-    - yarn install
-    - yarn test
 
