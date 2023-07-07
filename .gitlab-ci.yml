@@ -21,7 +21,42 @@ test website:
 unit test:
   image: node:16-alpine
   stage: test
+  script:stages:
+  - .pre #not necessary to include, can be omitted since is sys defined
+  - build
+  - test
+
+build website:
+  image: node:16-alpine
+  stage: build
   script:
+    - yarn install
+    - yarn build
+  artifacts:
+    paths:
+      - build
+
+linter:
+  image: node:16-alpine
+  stage: .pre
+  script:
+    - yarn install
+    - yarn lint
+
+test website:
+  image: alpine
+  stage: test
+  script:
+    - test -f build/index.html
+
+unit test:
+  image: node:16-alpine
+  stage: .pre
+  script:
+    - yarn install
+    - yarn test
+
+
     - yarn install
     - yarn test
 
